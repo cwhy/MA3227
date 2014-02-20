@@ -8,15 +8,15 @@ figure(1);
 err=zeros(length(N),1);
 h=zeros(length(N),1);
 for i=1:length(N)
-    h(i)=1/N(i);
-    x=linspace(0,1,N(i)+1)';
-    b=fcn(x);
-    u=[0;GE(b(2:end-1),h(i));0];
-    e=myerror(u,x);
-    hold on;
-    plot(x,e,drawStr{i});
-    err(i)=max(abs(e));
-    legendStr{i}=['N=',num2str(N(i))];
+	h(i)=1/N(i);
+	x=linspace(0,1,N(i)+1)';
+	b=fcn(x);
+	u=[0;GE(b(2:end-1),h(i));0];
+	e=myerror(u,x);
+	hold on;
+	plot(x,e,drawStr{i});
+	err(i)=max(abs(e));
+	legendStr{i}=['N=',num2str(N(i))];
 end
 legend(legendStr);
 xlabel('x');
