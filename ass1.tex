@@ -1,0 +1,432 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{enumitem}
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ 4} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+	\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+		\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+	\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+		\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Question \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+	\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+		\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+		\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+		\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+	\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+	\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+	\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+		\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+		\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+	\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Project\ \#1} % Assignment title
+\newcommand{\hmwkDueDate}{Thusday,\ 20\ Feb 2014} % Due date
+\newcommand{\hmwkClass}{MA3237\ 2110} % Course/class
+\newcommand{\hmwkAuthorName}{Chen Yu}
+\newcommand{\MatricNumber}{A0077976E}
+\newcommand{\AuthorDescription}{Engineering Science Programme}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+	\vspace{2in}
+	\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+		\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}
+	\vspace{3in}
+}
+
+\author{
+	\textbf{\hmwkAuthorName}\\
+		\textbf{\MatricNumber}\\
+		\textbf{\AuthorDescription}
+}
+\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\newpage
+\section{Matlab Code}
+\begin{lstlisting}[language=Matlab]
+clear; close all;
+function f = F(x)
+	f=pi^2*sin(pi*x);
+end % function
+%-----------------------------------
+function u = U(x)
+	u=sin(pi*x);
+end % function
+%-----------------------------------
+function upp = A(u)
+	m=size(u,1);
+	DD=sparse(1:m,1:m,2,m,m)+sparse(2:m,1:m-1,-1,m,m)+sparse(1:m-1,2:m,-1,m,m);
+	upp = DD*u;
+end % function
+%-----------------------------------
+function x_bar=rgd_solve(A,f,h)
+	m=size(f,1);
+	DD=sparse(1:m,1:m,2,m,m)+sparse(2:m,1:m-1,-1,m,m)+sparse(1:m-1,2:m,-1,m,m);
+	x_bar = DD\(f*h^2);
+end % function
+%-----------------------------------------------------
+function x_bar=cgd_solve(A,f,h,iter_max = 100)
+	b = f*h^2;
+	k = 0;
+	x = zeros(size(b));
+	r = b - A(x);
+	p = r;
+	
+	while(k < iter_max && max(abs(r))>=0.000000001)
+		k = k + 1
+		a = r'*p./(p'*(A(p)));
+		x = x + a*p;
+		r_old = r;
+		r = r - a*(A(p));
+		b = r'*r./(r_old'*r_old);
+		p = r + b*p;
+	end %while
+	x_bar = x;
+
+end % function
+%-----------------------------------------------------
+N=[10,20,40,80];
+drawStr={'r','b-.','g--','y:'};
+maxerr = zeros(length(N),1);
+
+error_plot = figure(1);
+hold on;
+grid on;
+legendStr=cell(1,length(N));
+I = 1;
+for n = N
+	h = 1/n;
+	mesh = linspace(0,1,n+1)';
+    Au = F(mesh);
+
+	x_bar = [0;cgd_solve(@A, Au(2:end-1),h);0];
+	err = x_bar - U(mesh);
+    plot(mesh, err, drawStr(I),'LineWidth',1,'MarkerSize',2)
+    maxerr(I) = max(abs(err));
+	clear("err")
+	legendStr{I}=['n=',num2str(n)];
+	I = I+1;
+end
+
+legend(legendStr);
+xlabel('x');
+ylabel('Error at grid points: u_i-u_{ex}(x_i)')
+print(error_plot,'error_plot.tex','-S900,450','-dtex')
+hold off;
+
+error_n_plot = figure(2);
+loglog(1./N,maxerr,'d-b','LineWidth',1,'MarkerSize',5)
+set(gca,'XDir','reverse');
+grid on;
+hold on; 
+loglog(1./N,(1./N).^2,'.-r','LineWidth',1);
+legend('|u-u_{ex}|_{\infty}','h v.s. h^2');
+xlabel('h');
+print(error_n_plot,'error_n_plot.tex','-S900,450','-dtex')
+hold off;
+\end{lstlisting}  
+
+% GNUPLOT: LaTeX picture with Postscript
+\begingroup
+  \makeatletter
+  \providecommand\color[2][]{%
+    \GenericError{(gnuplot) \space\space\space\@spaces}{%
+      Package color not loaded in conjunction with
+      terminal option `colourtext'%
+    }{See the gnuplot documentation for explanation.%
+    }{Either use 'blacktext' in gnuplot or load the package
+      color.sty in LaTeX.}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\includegraphics[2][]{%
+    \GenericError{(gnuplot) \space\space\space\@spaces}{%
+      Package graphicx or graphics not loaded%
+    }{See the gnuplot documentation for explanation.%
+    }{The gnuplot epslatex terminal needs graphicx.sty or graphics.sty.}%
+    \renewcommand\includegraphics[2][]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \@ifundefined{ifGPcolor}{%
+    \newif\ifGPcolor
+    \GPcolorfalse
+  }{}%
+  \@ifundefined{ifGPblacktext}{%
+    \newif\ifGPblacktext
+    \GPblacktexttrue
+  }{}%
+  % define a \g@addto@macro without @ in the name:
+  \let\gplgaddtomacro\g@addto@macro
+  % define empty templates for all commands taking text:
+  \gdef\gplbacktext{}%
+  \gdef\gplfronttext{}%
+  \makeatother
+  \ifGPblacktext
+    % no textcolor at all
+    \def\colorrgb#1{}%
+    \def\colorgray#1{}%
+  \else
+    % gray or color?
+    \ifGPcolor
+      \def\colorrgb#1{\color[rgb]{#1}}%
+      \def\colorgray#1{\color[gray]{#1}}%
+      \expandafter\def\csname LTw\endcsname{\color{white}}%
+      \expandafter\def\csname LTb\endcsname{\color{black}}%
+      \expandafter\def\csname LTa\endcsname{\color{black}}%
+      \expandafter\def\csname LT0\endcsname{\color[rgb]{1,0,0}}%
+      \expandafter\def\csname LT1\endcsname{\color[rgb]{0,1,0}}%
+      \expandafter\def\csname LT2\endcsname{\color[rgb]{0,0,1}}%
+      \expandafter\def\csname LT3\endcsname{\color[rgb]{1,0,1}}%
+      \expandafter\def\csname LT4\endcsname{\color[rgb]{0,1,1}}%
+      \expandafter\def\csname LT5\endcsname{\color[rgb]{1,1,0}}%
+      \expandafter\def\csname LT6\endcsname{\color[rgb]{0,0,0}}%
+      \expandafter\def\csname LT7\endcsname{\color[rgb]{1,0.3,0}}%
+      \expandafter\def\csname LT8\endcsname{\color[rgb]{0.5,0.5,0.5}}%
+    \else
+      % gray
+      \def\colorrgb#1{\color{black}}%
+      \def\colorgray#1{\color[gray]{#1}}%
+      \expandafter\def\csname LTw\endcsname{\color{white}}%
+      \expandafter\def\csname LTb\endcsname{\color{black}}%
+      \expandafter\def\csname LTa\endcsname{\color{black}}%
+      \expandafter\def\csname LT0\endcsname{\color{black}}%
+      \expandafter\def\csname LT1\endcsname{\color{black}}%
+      \expandafter\def\csname LT2\endcsname{\color{black}}%
+      \expandafter\def\csname LT3\endcsname{\color{black}}%
+      \expandafter\def\csname LT4\endcsname{\color{black}}%
+      \expandafter\def\csname LT5\endcsname{\color{black}}%
+      \expandafter\def\csname LT6\endcsname{\color{black}}%
+      \expandafter\def\csname LT7\endcsname{\color{black}}%
+      \expandafter\def\csname LT8\endcsname{\color{black}}%
+    \fi
+  \fi
+  \setlength{\unitlength}{0.0500bp}%
+  \begin{picture}(8640.00,4320.00)%
+    \gplgaddtomacro\gplbacktext{%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(1100,640){\makebox(0,0)[r]{\strut{}-0.002}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(1100,1213){\makebox(0,0)[r]{\strut{}0}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(1100,1786){\makebox(0,0)[r]{\strut{}0.002}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(1100,2360){\makebox(0,0)[r]{\strut{}0.004}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(1100,2933){\makebox(0,0)[r]{\strut{}0.006}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(1100,3506){\makebox(0,0)[r]{\strut{}0.008}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(1100,4079){\makebox(0,0)[r]{\strut{}0.01}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(1220,440){\makebox(0,0){\strut{}0}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(2632,440){\makebox(0,0){\strut{}0.2}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(4044,440){\makebox(0,0){\strut{}0.4}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(5455,440){\makebox(0,0){\strut{}0.6}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(6867,440){\makebox(0,0){\strut{}0.8}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(8279,440){\makebox(0,0){\strut{}1}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(160,2359){\rotatebox{90}{\makebox(0,0){\strut{}Error at grid points: $u_i-u_{ex}(x_i)$}}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(4749,140){\makebox(0,0){\strut{}x}}%
+    }%
+    \gplgaddtomacro\gplfronttext{%
+      \csname LTb\endcsname%
+      \put(7376,3916){\makebox(0,0)[r]{\strut{}n=10}}%
+      \csname LTb\endcsname%
+      \put(7376,3716){\makebox(0,0)[r]{\strut{}n=20}}%
+      \csname LTb\endcsname%
+      \put(7376,3516){\makebox(0,0)[r]{\strut{}n=40}}%
+      \csname LTb\endcsname%
+      \put(7376,3316){\makebox(0,0)[r]{\strut{}n=80}}%
+    }%
+    \gplbacktext
+    \put(0,0){\includegraphics{error_plot}}%
+    \gplfronttext
+  \end{picture}%
+\endgroup
+
+% GNUPLOT: LaTeX picture with Postscript
+\begingroup
+  \makeatletter
+  \providecommand\color[2][]{%
+    \GenericError{(gnuplot) \space\space\space\@spaces}{%
+      Package color not loaded in conjunction with
+      terminal option `colourtext'%
+    }{See the gnuplot documentation for explanation.%
+    }{Either use 'blacktext' in gnuplot or load the package
+      color.sty in LaTeX.}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\includegraphics[2][]{%
+    \GenericError{(gnuplot) \space\space\space\@spaces}{%
+      Package graphicx or graphics not loaded%
+    }{See the gnuplot documentation for explanation.%
+    }{The gnuplot epslatex terminal needs graphicx.sty or graphics.sty.}%
+    \renewcommand\includegraphics[2][]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \@ifundefined{ifGPcolor}{%
+    \newif\ifGPcolor
+    \GPcolorfalse
+  }{}%
+  \@ifundefined{ifGPblacktext}{%
+    \newif\ifGPblacktext
+    \GPblacktexttrue
+  }{}%
+  % define a \g@addto@macro without @ in the name:
+  \let\gplgaddtomacro\g@addto@macro
+  % define empty templates for all commands taking text:
+  \gdef\gplbacktext{}%
+  \gdef\gplfronttext{}%
+  \makeatother
+  \ifGPblacktext
+    % no textcolor at all
+    \def\colorrgb#1{}%
+    \def\colorgray#1{}%
+  \else
+    % gray or color?
+    \ifGPcolor
+      \def\colorrgb#1{\color[rgb]{#1}}%
+      \def\colorgray#1{\color[gray]{#1}}%
+      \expandafter\def\csname LTw\endcsname{\color{white}}%
+      \expandafter\def\csname LTb\endcsname{\color{black}}%
+      \expandafter\def\csname LTa\endcsname{\color{black}}%
+      \expandafter\def\csname LT0\endcsname{\color[rgb]{1,0,0}}%
+      \expandafter\def\csname LT1\endcsname{\color[rgb]{0,1,0}}%
+      \expandafter\def\csname LT2\endcsname{\color[rgb]{0,0,1}}%
+      \expandafter\def\csname LT3\endcsname{\color[rgb]{1,0,1}}%
+      \expandafter\def\csname LT4\endcsname{\color[rgb]{0,1,1}}%
+      \expandafter\def\csname LT5\endcsname{\color[rgb]{1,1,0}}%
+      \expandafter\def\csname LT6\endcsname{\color[rgb]{0,0,0}}%
+      \expandafter\def\csname LT7\endcsname{\color[rgb]{1,0.3,0}}%
+      \expandafter\def\csname LT8\endcsname{\color[rgb]{0.5,0.5,0.5}}%
+    \else
+      % gray
+      \def\colorrgb#1{\color{black}}%
+      \def\colorgray#1{\color[gray]{#1}}%
+      \expandafter\def\csname LTw\endcsname{\color{white}}%
+      \expandafter\def\csname LTb\endcsname{\color{black}}%
+      \expandafter\def\csname LTa\endcsname{\color{black}}%
+      \expandafter\def\csname LT0\endcsname{\color{black}}%
+      \expandafter\def\csname LT1\endcsname{\color{black}}%
+      \expandafter\def\csname LT2\endcsname{\color{black}}%
+      \expandafter\def\csname LT3\endcsname{\color{black}}%
+      \expandafter\def\csname LT4\endcsname{\color{black}}%
+      \expandafter\def\csname LT5\endcsname{\color{black}}%
+      \expandafter\def\csname LT6\endcsname{\color{black}}%
+      \expandafter\def\csname LT7\endcsname{\color{black}}%
+      \expandafter\def\csname LT8\endcsname{\color{black}}%
+    \fi
+  \fi
+  \setlength{\unitlength}{0.0500bp}%
+  \begin{picture}(8640.00,4320.00)%
+    \gplgaddtomacro\gplbacktext{%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(660,640){\makebox(0,0)[r]{\strut{}$10^{-4}$}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(660,2359){\makebox(0,0)[r]{\strut{}$10^{-3}$}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(660,4079){\makebox(0,0)[r]{\strut{}$10^{-2}$}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(8279,440){\makebox(0,0){\strut{}$10^{-2}$}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(780,440){\makebox(0,0){\strut{}$10^{-1}$}}%
+      \colorrgb{0.00,0.00,0.00}%
+      \put(4529,140){\makebox(0,0){\strut{}h}}%
+    }%
+    \gplgaddtomacro\gplfronttext{%
+      \csname LTb\endcsname%
+      \put(7376,3916){\makebox(0,0)[r]{\strut{}$|u-u_{ex}|_{\infty}$}}%
+      \csname LTb\endcsname%
+      \put(7376,3716){\makebox(0,0)[r]{\strut{}$h$ v.s. $h^2$}}%
+    }%
+    \gplbacktext
+    \put(0,0){\includegraphics{error_n_plot}}%
+    \gplfronttext
+  \end{picture}%
+\endgroup
+%----------------------------------------------------------------------------------------
+\end{document}

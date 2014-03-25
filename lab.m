@@ -1,6 +1,6 @@
 % solving -u''=f on [0,1] by backslash
 
-function err=Lab1_2()
+function err=lab()
 N=[10,20,40,80,160];
 drawStr={'r','b-.','g--','y:','k'};
 legendStr=cell(1,length(N));
@@ -11,8 +11,8 @@ for i=1:length(N)
 	h(i)=1/N(i);
 	x=linspace(0,1,N(i)+1)';
 	b=fcn(x);
-	u=[0;GE(b(2:end-1),h(i));0];
-	e=myerror(u,x);
+	u=[0;rgd_solve(b(2:end-1),h(i));0];
+	e=U(x)-u;
 	hold on;
 	plot(x,e,drawStr{i});
 	err(i)=max(abs(e));
@@ -30,11 +30,12 @@ legend('|u-u_{ex}|_{\infty}','h v.s. h^2');
 xlabel('h');
 
 %--------------------------------------------------------------------------
-function f=fcn(x)
-f=pi^2*sin(pi*x);
-
-function u=uex(x)
-u=sin(pi*x);
+function f = F(x)
+	f=pi^2*sin(pi*x);
+%-----------------------------------
+function u = U(x)
+	u=sin(pi*x);
+%-----------------------------------
 
 function u=GE(b,h)
 % use Gauss elimimation A\b 
@@ -43,5 +44,8 @@ A=sparse(1:m,1:m,2,m,m)+sparse(2:m,1:m-1,-1,m,m)+sparse(1:m-1,2:m,-1,m,m);
 
 u=A\(b*h^2);
 
-function e=myerror(u,x)
-e=u-uex(x);
+
+function x_bar=rgd_solve(f,h)
+	m=size(f,1);
+	DD=sparse(1:m,1:m,2,m,m)+sparse(2:m,1:m-1,-1,m,m)+sparse(1:m-1,2:m,-1,m,m);
+	x_bar = DD\(f*h^2);
