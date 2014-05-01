@@ -1,5 +1,7 @@
 clear;
 close all;
+graphics_toolkit("gnuplot");
+
 function I = repI(i)
 	I = [];
 	for j = 1:i
@@ -32,7 +34,7 @@ end
 
 equation = cell(3,1);
 equation{1} = '$g(x) = 1$';
-equation{2} = '$g(x) = \frac{4-2x}{3}$';
+equation{2} = '$g(x) = \\\frac{4-2x}{3}$';
 equation{3} = '$g(x) = 2-2x$';
 
 for i = 1:3
@@ -45,12 +47,15 @@ for i = 1:3
 	hold on;
 	loglog(nTrials, err{i}, 'LineWidth', 2);
 	loglog(nTrials, 1./sqrt(nTrials),'r:','LineWidth', 2);
-	title(['Method ', repI(i)])
-	legend('$\abs{err}$ vs number of trials','$\frac{1}{\sqrt{number of trials}}$');
+	legend('$\abs{Err}$ vs number of trials','$\frac{1}{\sqrt{\text{number of trials}}}$');
+	legend boxoff;
 
-	print(the_plot,['Method_',repI(i),'.tex'],'-S500,450','-dtex')
+	print(the_plot,['Method_',repI(i),'.tex'],'-S470,420','-dtex')
 end
 
 err_plot = figure(4);
-err_diff = cell2mat(err).*sqrt(nTrials)
-boxplot(err_diff, equation);
+err_diff = cell2mat(err).*sqrt(nTrials);
+boxplot(err_diff', 1, '+', 0);
+title('$\abs{Err} \times \sqrt{\text{number of trials}}$ for different methods')
+set(gca (), 'ytick', [1 2 3], 'yticklabel', equation)
+print(err_plot,'comparison','-S470,150','-dtex')
