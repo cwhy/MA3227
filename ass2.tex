@@ -1,0 +1,260 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{enumitem}
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ 6} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+\providecommand{\abs}[1]{\lvert#1\rvert}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+	\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+	\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+	\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+	\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Question \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+	\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+	\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+	\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+	\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+	\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+	\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+	\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+	\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+	\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+	\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Project\ \#3} % Assignment title
+\newcommand{\hmwkDueDate}{Wednsday,\ 4\ Apr 2014} % Due date
+\newcommand{\hmwkClass}{MA3237\ } % Course/class
+\newcommand{\hmwkAuthorName}{Chen Yu}
+\newcommand{\MatricNumber}{A0077976E}
+\newcommand{\AuthorDescription}{Engineering Science Programme}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+	\vspace{2in}
+	\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+	\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}
+	\vspace{3in}
+}
+
+\author{
+	\textbf{\hmwkAuthorName}\\
+	\textbf{\MatricNumber}\\
+	\textbf{\AuthorDescription}
+}
+\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\newpage
+\begin{homeworkProblem}
+	\section{Code} 
+	\begin{lstlisting}[language=Matlab]
+clear;
+close all;
+function I = repI(i)
+	I = [];
+	for j = 1:i
+		I = [I,'I'];
+	end
+end
+
+nTrials=2.^(1:20); m=length(nTrials);
+
+vEst = cell(3,1);
+for i = 1:3
+	vEst{i} = zeros(1,m);
+end
+
+rand('state',0);
+for i=1:m
+    n=nTrials(i);
+    x = rand(1,n);
+    vEst{1}(i) = sum(4*sqrt(1-x.^2))/n;
+    x = -sqrt(4 - 3*rand(1,n)) + 2;
+    vEst{2}(i) = sum(12*sqrt(1-x.^2)./(4-2*x))/n;
+    x = -sqrt(1 - rand(1,n)) + 1;
+    vEst{3}(i) = sum(4*sqrt(1-x.^2)./(2-2*x))/n;
+end
+
+err = cell(3,1);
+for i = 1:3
+	err{i} = vEst{i} - pi;
+end
+
+equation = cell(3,1);
+equation{1} = '1$';
+equation{2} = '\frac{4-2x}{3}$';
+equation{3} = '2-2x$';
+
+for i = 1:3
+	the_plot = figure(i);
+	subplot(2,1,1);
+	semilogx(nTrials,vEst{i});
+	title(['Method ',repI(i),': $g(x) =', equation{i}]);
+
+	subplot(2,1,2);
+	loglog(nTrials,abs(err{i}));
+	hold on;
+	loglog(nTrials,1./sqrt(nTrials),'r:'); title(['Method ', repI(i)])
+	legend('$\abs{err}$ vs number of trials','$\frac{1}{\sqrt{number of trials}}$');
+	print(the_plot,['Method_',repI(i),'.tex'],'-S500,450','-dtex')
+end
+	\end{lstlisting}  
+
+	\section{Figures}
+	\begingroup
+		\input{Method_I.tex}
+	\endgroup
+	\begingroup
+		\input{Method_II.tex}
+	\endgroup
+	\begingroup
+		\input{Method_III.tex}
+	\endgroup
+\end{homeworkProblem}
+
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 2
+%----------------------------------------------------------------------------------------
+
+\begin{homeworkProblem}
+	\section{Code} 
+	\begin{lstlisting}[language=Matlab]
+clear; close all;
+graphics_toolkit("gnuplot");
+
+N_bins = 101;
+
+function M = Metro_Ising(mu, N_steps, sample_rate, N)
+	x = ones(N, 1);
+	M = zeros(0, N_steps/sample_rate);
+	for i = 1:N_steps
+		j = ceil(N*rand);
+		if j == 1
+			h = exp(-2*mu*x(1)*(x(2)));
+		elseif j == N
+			h = exp(-2*mu*x(N)*(x(N-1)));
+		else
+			h = exp(-2*mu*x(j)*(x(j-1)+x(j+1)));
+		end
+		U = rand;
+		if U <= h
+			x(j) = -x(j);
+		end
+		if mod(i, 50) == 0
+			M(i/50) = sum(x);
+		end
+	end
+end
+
+N_steps = 1e6;
+sample_rate = 50;
+N = 50;
+%mesh = -N:floor(2*N/(N_bins - 1)):N;
+%[n, h] = hist(M, mesh);
+the_plot = figure();
+M_h = Metro_Ising(1, N_steps, sample_rate, N);
+M_l = Metro_Ising(2, N_steps, sample_rate, N);
+
+h_plot = subplot(2,1,1);
+hist(M_h, 101);
+title(['Histogram of sum of states of high temperature ($\mu = 1$),
+	'1D Ising model with $20,000$ from $1,000,000$ states']);
+xlabel('Sum of states');
+ylabel('Number of samples');
+
+l_plot = subplot(2,1,2);
+hist(M_l, 101);
+title(['Histogram of sum of states of low temperature ($\mu = 2$),
+	'1D Ising model with $20,000$ from $1,000,000$ states']);
+xlabel('Sum of states');
+ylabel('Number of samples');
+
+print(the_plot, ['MetropolisIsing','.tex'],'-S520,400','-dtex')
+	\end{lstlisting}  
+	\section{Figures}
+		\begingroup
+			\input{MetropolisIsing.tex}
+		\endgroup
+\end{homeworkProblem}
+
+%----------------------------------------------------------------------------------------
+\end{document}
