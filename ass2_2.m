@@ -36,13 +36,15 @@ M_l = Metro_Ising(2, N_steps, sample_rate, N);
 
 h_plot = subplot(2,1,1);
 hist(M_h, 101);
-title('Histogram of sum of states of high temperature ($\mu = 1$) 1D Ising model with $20,000$ from $1,000,000$ states');
+title(['Histogram of sum of states of high temperature ($\mu = 1$)',
+       '1D Ising model with $20,000$ from $1,000,000$ states']);
 xlabel('Sum of states');
 ylabel('Number of samples');
 
 l_plot = subplot(2,1,2);
 hist(M_l, 101);
-title('Histogram of sum of states of low temperature ($\mu = 2$) 1D Ising model with $20,000$ from $1,000,000$ states');
+title(['Histogram of sum of states of low temperature ($\mu = 2$)',
+       '1D Ising model with $20,000$ from $1,000,000$ states']);
 xlabel('Sum of states');
 ylabel('Number of samples');
 

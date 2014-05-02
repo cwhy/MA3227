@@ -47,7 +47,8 @@ for i = 1:3
 	hold on;
 	loglog(nTrials, err{i}, 'LineWidth', 2);
 	loglog(nTrials, 1./sqrt(nTrials),'r:','LineWidth', 2);
-	legend('$\abs{Err}$ vs number of trials','$\frac{1}{\sqrt{\text{number of trials}}}$');
+	legend('$\abs{Err}$ vs number of trials',
+	       '$\frac{1}{\sqrt{\text{number of trials}}}$');
 	legend boxoff;
 
 	print(the_plot,['Method_',repI(i),'.tex'],'-S470,420','-dtex')
@@ -56,6 +57,7 @@ end
 err_plot = figure(4);
 err_diff = cell2mat(err).*sqrt(nTrials);
 boxplot(err_diff', 1, '+', 0);
-title('$\abs{Err} \times \sqrt{\text{number of trials}}$ for different methods')
+title(['$\abs{Err} \times \sqrt{\text{number of trials}}$',
+       ' for different methods'])
 set(gca (), 'ytick', [1 2 3], 'yticklabel', equation)
 print(err_plot,'comparison','-S470,150','-dtex')

@@ -1,0 +1,287 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{enumitem}
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ 6} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+\providecommand{\abs}[1]{\lvert#1\rvert}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+	\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+	\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+	\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+	\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Part \roman{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+	\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+	\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+	\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+	\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+	\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+	\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+	\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+	\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+	\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+	\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\lstloadlanguages{Matlab} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\lstset{language=Matlab, % Use Perl in this example
+	frame=single, % Single frame around code
+	basicstyle=\small\ttfamily, % Use small true type font
+	keywordstyle=[1]\color{Blue}\bf, % Perl functions bold and blue
+	keywordstyle=[2]\color{Purple}, % Perl function arguments purple
+	keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+	identifierstyle=, % Nothing special about identifiers                                         
+	commentstyle=\usefont{T1}{pcr}{m}{sl}\color{Green}\small, % Comments small dark green courier font
+	stringstyle=\color{Purple}, % Strings are purple
+	showstringspaces=false, % Don't put marks in string spaces
+	tabsize=5, % 5 spaces per tab
+	%
+	% Put standard Perl functions not included in the default language here
+	morekeywords={rand},
+	%
+	% Put Perl function parameters here
+	morekeywords=[2]{on, off, interp},
+	%
+	% Put user defined functions here
+	morekeywords=[3]{test},
+	%
+	morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+	numbers=left, % Line numbers on left
+	firstnumber=1, % Line numbers start with line 1
+	numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+	stepnumber=5 % Line numbers go in steps of 5
+}
+
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Assignment\ \#3} % Assignment title
+\newcommand{\hmwkDueDate}{Wednsday,\ 4\ Apr 2014} % Due date
+\newcommand{\hmwkClass}{MA3237\ } % Course/class
+\newcommand{\hmwkAuthorName}{Chen Yu}
+\newcommand{\MatricNumber}{A0077976E}
+\newcommand{\AuthorDescription}{Engineering Science Programme}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+	\vspace{2in}
+	\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+	\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}
+	\vspace{3in}
+}
+
+\author{
+	\textbf{\hmwkAuthorName}\\
+	\textbf{\MatricNumber}\\
+	\textbf{\AuthorDescription}
+}
+\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+\begin{homeworkProblem}[Homework Part I]
+	\begin{homeworkSection}{(1)}
+	  \problemAnswer{
+		\textbf{Case 1:}
+		$$\hat{V}_{B1} = \frac{\text{\#hits in B}}{\text{\#hits in A}}V_A$$
+		Let $\hat\theta_1 = \frac{\text{\#hits in B}}{\text{\#hits in A}}$, which follows a binomial distribution with $N=n$, $p = \frac{V_B}{V_A}$\\
+		Then $$\sigma_1 = \frac{\theta_1(1-\theta_1)}{n}V_A^2 = \frac{V_AV_B(V_A-V_B)}{n}$$
+		\textbf{Case 2:}
+		$$\hat{V}_{B2} = \frac{\text{\#hits in B\\D}}{\text{\#hits in A\\D}}(V_A-V_D) + V_{B\\D}$$
+		Let $\hat\theta_2 = \frac{\text{\#hits in B\\D}}{\text{\#hits in A\\D}}$, which follows a binomial distribution with $N=n$, $p = \frac{V_{B\\D}}{V_{A\\D}}$\\
+		Then
+		\begin{align*} 
+		  \sigma_2 &= \frac{\theta_2(1-\theta_2)}{n}(V_A-V_D)^2 
+		  \\ &= \frac{ (V_A - V_D) V_{B\setminus D} (V_A-V_{B\setminus D}-V_D) }{n}
+		  \\ &= \frac{(V_A-V_D)(V_B - V_{B\cap D})(V_A-V_{D\setminus B}-V_B)}{n}
+		\end{align*}
+		Since 
+		\begin{align*} 
+		  V_A &> V_A-V_D
+		  \\ V_B &> V_B-V_{B_{B\cap D}}
+		  \\ V_A-V_B &> V_A-V_B-V_{D\setminus B}
+		\end{align*}
+		we get $\sigma_1 > \sigma_2$
+		}
+	\end{homeworkSection}
+	\begin{homeworkSection}{(2)}
+	  \problemAnswer{
+	  \textbf{a)}
+	    In this method, the estimator follows a binomial distribution with $n =N$ and $p =\frac{I}{1} = I$\\
+	    Hence the variance is 
+	    \begin{align*}
+	      \frac{1}{N}I(1-I) = \frac{1}{N}(I-I^2)
+	    \end{align*}
+	  \textbf{b)}
+	    The variance of this Monte Carlo Integration is 
+	    \begin{align*}
+	     \Var [\frac{1}{N}\sum_{i=1}^n{f(U_i)}] &= \frac{1}{N^2}N\Var [f(U_i)]\\
+	     &= \frac{1}{N} (\E[f(U_i)^2]-I^2)
+	    \end{align*}
+	    Since $$ \forall x \in [0,1], f(x) \in (0,1)$$
+	    we have $$f(x)^2 < f(x)$$,
+	    thus $$\E[f(U_i)^2] < \E[f(U_i)]$$
+	    Therefore the method in b) has a smaller variance.
+	    }
+	\end{homeworkSection}
+	\begin{homeworkSection}{(3)}
+	  \problemAnswer{
+	    \begin{align*}
+	    (n-1)S_n^2 &= \sum_{i=1}^n{(X_i - \bar{X})^2}
+	    \\ &= \sum_{i=1}^n{(X_i^2 - 2\bar{X}X_i+ \bar{x}^2)}
+	    \\ &= \sum_{i=1}^n{X_i^2} - 2\bar{X}\sum_{i=1}^n{X_i}+ n\bar{x}^2
+	    \\ &= \sum_{i=1}^n{X_i^2} - 2n\bar{X}^2 + n\bar{x}^2
+	    \\ &= \sum_{i=1}^n{X_i^2} - n\bar{X}^2
+	    \end{align*}
+	    \begin{align*}
+	    \E [S_n^2] &= \frac{1}{n-1} \E [ \sum_{i=1}^n{X_i^2} - n\bar{X}^2 ]
+	    \\ &= \frac{1}{n-1} (n\E[X_i^2] - n\E[\bar{X}^2])
+	    \\ &= \frac{n}{n-1} (\E[X_i^2] - \E[\bar{X}^2])
+	    \end{align*}
+	    \begin{align*}
+	      \E [X_i^2] = (\E [X_i])^2 + \Var [X_i]
+	    \end{align*}
+	    \begin{align*}
+	      \E [\bar{X}^2] &= (\E [\bar{X}])^2 + \Var [\bar{X}]&
+	      \\ &= (\E[\frac{1}{n}\sum_{i=1}^n{X_i}])^2 + \Var [\frac{1}{n}\sum_{i=1}^n{X_i}]&
+	      \\ &= (\E[X_i])^2 + \frac{1}{n} \Var [X_i] &\text{(i.i.d)}
+	    \end{align*}
+	    Therefore,
+	    \begin{align*}
+	      \E [S_n^2] &= \frac{n}{n-1} ((\E[X_i])^2 + \Var[X_i] - (\E[X_i])^2 -\frac{1}{n} \Var [X_i] )
+	      \\ &= \Var[X_i]
+	    \end{align*}
+	    }
+	\end{homeworkSection}
+\end{homeworkProblem}
+\clearpage
+
+\begin{homeworkProblem}[Homework Part II(1)]
+	  \problemAnswer{
+	    Let $P_{x,y}$ be the transition probablity function. The transition probablity function generated by the new Metropolis algorithm is
+	    $$
+	    Q_{x,y} = \min \{ 1,\frac{i}{P_{y,x}f(y)}{P_{x,y}f(x)}\}P_{x,y}
+	    $$
+	    \begin{align*}
+	      f(x)Q_{x,y} &= f(x)\min \{ 1,\frac{i}{P_{y,x}f(y)}{P_{x,y}f(x)}\}P_{x,y}
+	      \\ &=  \min\{f(x)P_{y,x}, f(y)P_{y,x} \}
+	    \end{align*}
+	    \begin{align*}
+	      f(y)Q_{y,x} &= f(y)\min \{1,\frac{i}{P_{x,y}f(x)}{P_{y,x}f(y)} \}P_{y,x}
+	      \\ &=  \min\{f(x)P_{y,x}, f(y)P_{y,x} \}
+	    \end{align*}
+	    \begin{align*}
+	    \implies f(x)Q_{x,y} = f(y)Q_{y,x}
+	    \end{align*}
+	    , thus satisfying the detailed balance, which ensures that the Metropolis-Hasting chain generated has invariant distribution.
+	  }
+\end{homeworkProblem}
+\clearpage
+
+\begin{homeworkProblem}[Computer Project Part I]
+	\begin{homeworkSection}{Code}
+	\begin{itemize}
+		\item[]
+			\lstinputlisting{ass2_1.m}
+	\end{itemize} 
+	\end{homeworkSection}
+
+	\begin{homeworkSection}{Figures}
+		\input{Method_I.tex}
+		\input{Method_II.tex}
+		\input{Method_III.tex}
+		\input{comparison.tex}
+	\end{homeworkSection}
+\end{homeworkProblem}
+
+\clearpage
+
+\begin{homeworkProblem}[Computer Project Part II]
+	\begin{homeworkSection}{Code}
+	\begin{itemize}
+		\item[]
+			\lstinputlisting{ass2_2.m}
+	\end{itemize} 
+	\end{homeworkSection}
+
+	\begin{homeworkSection}{Figures}
+		\input{MetropolisIsing.tex}
+	\end{homeworkSection}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[Homework Part II(2)]
+	\problemAnswer{
+	  $f$ is the distribution of all microstates in the state space of $2^N$ possible micro states of $(x_1, x_2, ..., x_N)$, where $x_i = -1 \text{ or } 1$.\\
+	  $P_{x,y} = \frac{1}{N}$ if $x_i = y_i$ for all but one component; which results in a proposed state $y$ where only the spin of one particle is reversed.
+	}
+\end{homeworkProblem}
+%----------------------------------------------------------------------------------------
+\end{document}
